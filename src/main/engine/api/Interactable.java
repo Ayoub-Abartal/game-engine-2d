@@ -7,12 +7,8 @@ import java.awt.*;
 /**
  * Interactable -
  */
-public interface Interactable {
+public interface Interactable extends Positioned {
 
-    int getX();
-    int getY();
-    int getWidth();
-    int getHeight();
     int getInteractRange();
 
 
@@ -56,7 +52,9 @@ public interface Interactable {
     default boolean pauseGameOnInteract(){
         return false;
     }
+
     void setFocused(boolean focused);
+    
     boolean isFocused();
 
     void interact();

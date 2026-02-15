@@ -3,12 +3,14 @@ package main.engine.entity;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import main.engine.api.Positioned;
+
 /**
  * Entity - Base class for all game entities (Player, NPCs, etc.)
  * 
  * Contains common properties: position, size, sprite
  */
-public abstract class Entity {
+public abstract class Entity implements Positioned {
     
     protected int x, y;
     protected int width, height;
