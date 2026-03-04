@@ -1,9 +1,7 @@
 package main.engine.world;
 
+// cleared unused imports
 
-import main.engine.graphics.TileSpriteSheet;
-
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -177,4 +175,6 @@ public class TileManager {
         Tile tile = tiles.get(tileIndex);
         return tile != null && tile.solid;
     }
+
+    public int getTileSize(){return this.tileSize;}
 }

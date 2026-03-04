@@ -1,6 +1,6 @@
 package main.engine.world;
 
-import main.game.config.PlateformerConfig;
+
 import main.engine.api.Collidable;
 import main.engine.core.Scene;
 import main.engine.physics.CollisionContext;
@@ -18,10 +18,13 @@ public class CollisionChecker {
     private TileManager tileManager;
 
     private Scene scene;
+    private int tileSize;
 
     public CollisionChecker(TileManager tileManager,Scene scene) {
         this.tileManager = tileManager;
         this.scene = scene;
+        this.tileSize = tileManager.getTileSize();
+
     }
     
     /**
@@ -37,10 +40,10 @@ public class CollisionChecker {
         int bottom = (int) position.y + height - 4;
         
         // Convert to tile coordinates
-        int leftCol = left / PlateformerConfig.TILE_SIZE;
-        int rightCol = right / PlateformerConfig.TILE_SIZE;
-        int topRow = top / PlateformerConfig.TILE_SIZE;
-        int bottomRow = bottom / PlateformerConfig.TILE_SIZE;
+        int leftCol = left / tileSize;
+        int rightCol = right / tileSize;
+        int topRow = top / tileSize;
+        int bottomRow = bottom / tileSize;
         
         // Check all 4 corners
         // Checking the collision with the tile

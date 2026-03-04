@@ -1,6 +1,7 @@
 package main.engine.dialogue;
 
-import main.game.config.PlateformerConfig;
+import main.engine.core.GameSettings;
+
 
 import java.awt.*;
 
@@ -33,12 +34,12 @@ public class DialogueBox {
     private Color nameColor = new Color(255, 200, 100);
     private Color hintColor = new Color(150, 150, 160);
     
-    public DialogueBox() {
+    public DialogueBox(GameSettings settings) {
         // Position at bottom of screen
-        boxWidth = PlateformerConfig.SCREEN_WIDTH - 100;
+        boxWidth = settings.getScreenWidth() - 100;
         boxHeight = 120;
         boxX = 50;
-        boxY = PlateformerConfig.SCREEN_HEIGHT - boxHeight - 30;
+        boxY = settings.getScreenHeight() - boxHeight - 30;
     }
     
     /**
