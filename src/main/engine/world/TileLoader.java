@@ -1,6 +1,7 @@
 package main.engine.world;
 
 import main.engine.graphics.TileSpriteSheet;
+import main.engine.utils.Log;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class TileLoader {
             Tile tile = new Tile( ImageIO.read(TileLoader.class.getResourceAsStream(imagePath)), solid);
             tileManager.registerTile(id, tile);
         }catch (IOException e){
-            e.printStackTrace();
+            Log.error("Failed loading Single Tile: "+imagePath,e);
         }
     }
 }

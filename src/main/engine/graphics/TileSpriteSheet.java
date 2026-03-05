@@ -1,6 +1,9 @@
 package main.engine.graphics;
 
 import javax.imageio.ImageIO;
+
+import main.engine.utils.Log;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -21,10 +24,11 @@ public class TileSpriteSheet {
             sheet = ImageIO.read(getClass().getResourceAsStream(path));
             cols = sheet.getWidth() / tileWidth;
             rows = sheet.getHeight() / tileHeight;
-            System.out.println("TileSpriteSheet loaded: " + path + " (" + cols + "x" + rows + " tiles)");
+            
+            Log.info("TileSpriteSheet loaded: " + path + " (" + cols + "x" + rows + " tiles)");
         } catch (IOException e) {
-            System.err.println("Failed to load tile spritesheet: " + path);
-            e.printStackTrace();
+            Log.error("Failed to load tile spritesheet: " + path,e);
+
         }
     }
     

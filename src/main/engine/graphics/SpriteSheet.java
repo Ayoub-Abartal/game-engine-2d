@@ -1,6 +1,9 @@
 package main.engine.graphics;
 
 import javax.imageio.ImageIO;
+
+import main.engine.utils.Log;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -34,14 +37,14 @@ public class SpriteSheet {
             columns = sheet.getWidth() / frameWidth;
             rows = sheet.getHeight() / frameHeight;
             
-            System.out.println("Loaded sprite sheet: " + path);
-            System.out.println("  Size: " + sheet.getWidth() + "x" + sheet.getHeight());
-            System.out.println("  Frame size: " + frameWidth + "x" + frameHeight);
-            System.out.println("  Grid: " + columns + " cols x " + rows + " rows");
-            System.out.println("  Total frames: " + (columns * rows));
+            Log.info("Loaded sprite sheet: " + path);
+            Log.info("  Size: " + sheet.getWidth() + "x" + sheet.getHeight());
+            Log.info("  Frame size: " + frameWidth + "x" + frameHeight);
+            Log.info("  Grid: " + columns + " cols x " + rows + " rows");
+            Log.info("  Total frames: " + (columns * rows));
         } catch (IOException e) {
-            System.err.println("Failed to load sprite sheet: " + path);
-            e.printStackTrace();
+            Log.error("Failed to load sprite sheet: " + path, e);
+           
         }
     }
     

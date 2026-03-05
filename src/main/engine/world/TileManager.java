@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import main.engine.utils.Log;
+
 /**
  * TileManager - Loads and renders the game main.engine.world.
  *
@@ -53,7 +55,9 @@ public class TileManager {
     public void loadMap(String backgroundPath, String platformPath) {
         backgroundLayer = loadLayer(backgroundPath);
         platformLayer = loadLayer(platformPath);
-        System.out.println("Multi-layer map loaded: " + mapCols + "x" + mapRows);
+        //System.out.println("Multi-layer map loaded: " + mapCols + "x" + mapRows);
+        
+        Log.info("Multi-layer map loaded: " + mapCols + "x" + mapRows);
     }
 
     /**
@@ -112,8 +116,11 @@ public class TileManager {
             mapRows = rows;
 
         } catch (IOException e) {
-            System.err.println("Error loading layer: " + path);
-            e.printStackTrace();
+            /* System.err.println("Error loading layer: " + path);
+            e.printStackTrace(); */ 
+
+            Log.error("Failed Loading Layer: "+path, e);
+
         }
 
         // return the 2d Array

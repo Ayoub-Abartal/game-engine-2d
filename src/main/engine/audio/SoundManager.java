@@ -1,6 +1,9 @@
 package main.engine.audio;
 
 import javax.sound.sampled.*;
+
+import main.engine.utils.Log;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -29,7 +32,7 @@ public class SoundManager {
         try {
             URL url = SoundManager.class.getResource(path);
             if (url == null) {
-                System.err.println("Sound not found: " + path);
+                Log.error("Sound not found: " + path);
                 return;
             }
             
@@ -37,9 +40,9 @@ public class SoundManager {
             Clip clip = AudioSystem.getClip();
             clip.open(ais);
             sounds.put(name, clip);
-            System.out.println("Sound loaded: " + name);
+            Log.info("Sound loaded: " + name);
         } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            System.err.println("Failed to load sound: " + path + " - " + e.getMessage());
+            Log.error("Failed to load sound: " + path + " - " + e.getMessage(),e);
         }
     }
     
