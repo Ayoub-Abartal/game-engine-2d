@@ -1,144 +1,93 @@
-# Refactoring Backlog
+# Technical Debt & Architecture Roadmap
 
-This document tracks planned improvements and design pattern implementations for the engine. The project serves as a learning dojo for system design and software architecture.
+Framework evolution tracking for production readiness and multi-genre support.
 
-## Phase 1: Production Ready (Current Priority)
+## Phase 1: Core Stability
 
-### High Priority
-- [ ] **Logging System** - Replace System.out with proper logging framework
-  - Design Logger interface
-  - Implement console logger
-  - Add log levels (DEBUG, INFO, WARN, ERROR)
-  - Replace all System.out/err calls
-  - Pattern: Strategy Pattern, Dependency Injection
+### Completed
+- [x] **Logging Infrastructure** - java.util.logging facade with file rotation
+- [x] **Physics Extraction** - PlatformerPhysics with single-responsibility methods
+- [x] **Interface Segregation** - Positioned, Updatable, Drawable, Interactable, Collidable
 
-- [ ] **Unit Tests** - Add test coverage for core components
-  - Test PlatformerPhysics methods
-  - Test collision detection (AABB, tryMove)
-  - Test Vector2D operations
-  - Mock MovementValidator for isolated testing
-  - Pattern: Test-Driven Development
+### In Progress
+- [ ] **Core Architecture Refactor**
+  - Extract GameWindow from GameEngine
+  - Implement SceneManager.
+  - Refactor GameEngine → GameApplication (Template Method)
+  - Fix GameLoop thread safety (proper pause/resume)
 
-- [ ] **Error Handling** - Improve exception handling
-  - Replace printStackTrace with proper error reporting
-  - Add custom exceptions (ResourceNotFoundException, etc.)
-  - Graceful degradation for missing resources
-  - Pattern: Exception Handling Best Practices
+### Pending
+- [ ] **Test Coverage** - PlatformerPhysics, AABB, Vector2D, collision resolution
+- [ ] **Error Handling** - Custom exceptions, graceful resource loading failures
+- [ ] **API Documentation** - Complete JavaDoc coverage for public APIs
 
-- [ ] **Documentation** - Design decision documentation
-  - Document trade-offs in ARCHITECTURE.md
-  - Add JavaDoc to public APIs
-  - Create usage examples
-  - Pattern: Documentation as Code
+## Phase 2: Framework Maturity
 
-## Phase 2: Advanced Patterns (Next)
+### Dependency Management
+- [ ] **SoundManager** - Remove static singleton, inject AudioSystem interface
+- [x] **NPC Extraction** - Move game-specific NPC to game code, keep Entity in engine
+- [ ] **DialogueSystem** - Interface-based dialogue with multiple implementations
 
-### Design Pattern Improvements
-- [ ] **SoundManager Refactoring** - Remove static singleton
-  - Convert to instance-based design
-  - Add AudioSystem interface
-  - Inject into scenes/entities
-  - Pattern: Dependency Injection, Service Locator
+### Stateless Design
+- [ ] **PhysicsState** - Extract mutable state from PlatformerPhysics
+- [ ] **Interactable Helpers** - Remove logic from interface.
 
-- [ ] **PhysicsState Extraction** - Stateless physics design
-  - Extract velocity and onGround to PhysicsState class
-  - Make PlatformerPhysics stateless
-  - Enable physics instance sharing
-  - Pattern: Stateless Service, Value Object
+## Phase 3: Multi-Genre Support
 
-- [ ] **DialogueSystem Interface** - Decouple NPC from DialogueBox
-  - Extract DialogueSystem interface
-  - Allow different dialogue implementations
-  - Pattern: Dependency Inversion Principle
+### Grid-Based Games (Candy Crush, Match-3)
+- [ ] **GridManager** - Tile grid with swap, match detection, gravity
+- [ ] **GridPhysics** - Snap-to-grid movement, match validation
 
-- [ ] **InteractionHelper** - Remove logic from Interactable interface
-  - Extract isPlayerNear to helper class
-  - Extract drawInteractionIndicator to helper
-  - Keep interface as pure contract
-  - Pattern: Helper/Utility Pattern, Interface Segregation
+### Top-Down Games (RPG, Roguelike)
+- [ ] **TopDownPhysics** - 8-direction movement, no gravity
+- [ ] **Pathfinding** - A* for NPC navigation
 
-## Phase 3: Scalability (Future)
+### Advanced Platformer
+- [ ] **State Machine** - Player states (idle, run, jump, fall, dash, wall-slide)
+- [ ] **Advanced Movement** - Double jump, variable jump height, coyote time
 
-### Architecture Improvements
-- [ ] **Entity Component System (ECS)** - Replace inheritance with composition
-  - Separate data (components) from behavior (systems)
-  - Improve performance for many entities
-  - Pattern: Entity Component System
+## Phase 4: Performance & Scalability
 
-- [ ] **Event System** - Decouple game logic
-  - Add EventBus for game events
-  - Replace direct method calls with events
-  - Pattern: Observer Pattern, Event-Driven Architecture
+### Optimization (When Needed)
+- [ ] **Entity Component System** - Data-oriented design for 500+ entities
+- [ ] **Object Pooling** - Reduce GC pressure for particles, projectiles
+- [ ] **Spatial Partitioning** - Quadtree for collision optimization
 
-- [ ] **Resource Pooling** - Optimize memory usage
-  - Pool sprites, sounds, particles
-  - Reduce garbage collection pressure
-  - Pattern: Object Pool Pattern
+### Observability
+- [ ] **Performance Profiling** - FPS counter, frame time graph, memory usage
+- [ ] **Event System** - Decouple game logic with EventBus
 
-- [ ] **Plugin Architecture** - Extensible physics system
-  - Split PlatformerPhysics into plugins
-  - MovementPlugin, JumpPlugin, GravityPlugin
-  - Allow runtime composition
-  - Pattern: Plugin Architecture, Strategy Pattern
+## Phase 5: Tooling & Polish
 
-## Phase 4: Advanced Features (Later)
+- [ ] **Serialization** - Save/load game state (JSON)
+- [ ] **Asset Pipeline** - Hot-reload resources during development
+- [ ] **Debug Renderer** - Collision boxes, velocity vectors, grid overlay
 
-### Gameplay Systems
-- [ ] **State Machine** - Complex player states
-  - Idle, Running, Jumping, Falling, Dashing, WallSliding
-  - Clean state transitions
-  - Pattern: State Pattern, Finite State Machine
+## Design Principles
 
-- [ ] **Behavior Trees** - AI system for NPCs
-  - Composable AI behaviors
-  - Reusable AI components
-  - Pattern: Behavior Tree, Composite Pattern
+**Opinionated Structure:**
+- Scene-based architecture (mandatory)
+- Entity base class with interface composition
+- Framework controls lifecycle (Template Method)
 
-- [ ] **Serialization System** - Save/Load game state
-  - Save player progress, inventory, world state
-  - JSON or binary format
-  - Pattern: Memento Pattern, Serialization
+**Flexible Implementation:**
+- Genre-specific physics modules (optional)
+- Interface-based systems (swappable)
+- Composition over inheritance where practical
 
-- [ ] **Performance Profiling** - Optimization tools
-  - FPS counter, memory usage
-  - Hotspot detection
-  - Performance metrics dashboard
-  - Pattern: Instrumentation, Observer Pattern
+**Pragmatic Evolution:**
+- Refactor based on actual pain points
+- Avoiding premature optimization (no ECS until 500+ entities)
+- Maintaining backward compatibility within major versions
 
-## Phase 5: Advanced Physics (Optional)
+## Architecture Decisions
 
-### Physics Extensions
-- [ ] **TopDownPhysics** - For RPG/roguelike games
-  - 8-direction movement
-  - No gravity
-  - Pattern: Strategy Pattern
+**Framework :** Framework (inversion of control via GameApplication)
 
-- [ ] **GridPhysics** - For Snake/puzzle games
-  - Tile-based movement
-  - Turn-based logic
-  - Pattern: Strategy Pattern
+**Entity Model:** OOP with interface segregation.
 
-- [ ] **Advanced Platformer Features**
-  - Double jump
-  - Wall sliding
-  - Dash mechanics
-  - Variable jump height
-  - Pattern: State Pattern, Command Pattern
+**Scene Management:** State pattern with future support for scene stack
 
-## Learning Goals
+**Physics:** Modular genre-specific implementations (PlatformerPhysics, GridPhysics, TopDownPhysics)
 
-Each refactoring phase focuses on specific design patterns and principles:
-
-**Phase 1:** SOLID principles, testing, documentation
-**Phase 2:** Dependency Injection, stateless design, interface segregation
-**Phase 3:** Scalability patterns, performance optimization
-**Phase 4:** Complex behavioral patterns, AI systems
-**Phase 5:** Domain-specific implementations
-
-## Notes
-
-- Each item should be a separate commit with clear message
-- Document learnings in blog posts
-- Add tests before refactoring (when possible)
-- Keep game working after each refactoring
-- Prioritize learning over perfection
+**Rendering:** Swing-based (acceptable for 2D, cross-platform via Java)
