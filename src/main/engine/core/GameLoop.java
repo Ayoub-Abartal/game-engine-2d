@@ -4,50 +4,62 @@ package main.engine.core;
 // the Game Loop shouldn't know about the player
 // but it should know about the scene
 
-
-import main.engine.core.GameSettings;
-
 public class GameLoop implements Runnable{
 
     private double nanoPerFrame;
     private volatile boolean paused = false;
+
+    private volatile boolean running = false;
     // referencing a scene
-    private Scene scene; // change it to final later so the user cant modify the scene while the game loop is running
+    //private Scene scene; // change it to final later so the user cant modify the scene while the game loop is running
+    
+    private final SceneManager sceneManager; 
+
     private Thread gameThread;
 
-    private GameSettings gameSettings;
-
-    public GameLoop(GameSettings gameSettings){
-        this.gameSettings = gameSettings;
-        this.nanoPerFrame = 1_000_000_000.0 / gameSettings.getFps() ;
+    public GameLoop(GameSettings gameSettings,SceneManager sceneManager){
+        this.sceneManager = sceneManager;
+        this.nanoPerFrame = 1_000_000_000.0 / gameSettings.getFps();
     }
 
     public void startGame(){
-        gameThread= new Thread(this);
+        running = true;
+        gameThread= new Thread(this,"GameLoop");
         gameThread.start();
     }
 
     public void pauseGame(){
-        this.paused = !paused;
+        this.paused = true;
     }
 
     public void resumeGame(){
-        this.paused = !paused;
+        this.paused = false;
     }
+
     @Override
     public void run() {
         double lastTime = System.nanoTime();
 
         double nextDrawTime = System.nanoTime() + nanoPerFrame;
 
-        // checking for null safety
-        while(gameThread != null && scene!=null){
+        while(running){
+
+            if(paused){
+                try{
+                    Thread.sleep(100);
+                }catch(InterruptedException e){
+                    Thread.currentThread().interrupt();
+                }
+
+                continue;
+            }
+
             double currentTime = System.nanoTime();
             double delta = (currentTime - lastTime) / nanoPerFrame;
             lastTime = currentTime;
 
-            scene.update(delta);
-            scene.repaint();
+            sceneManager.update(delta);
+            sceneManager.render();
 
             try {
                 double remainingTime = (nextDrawTime - System.nanoTime()) / 1_000_000;
@@ -61,9 +73,7 @@ public class GameLoop implements Runnable{
     }
 
     public void stopGame(){
-        gameThread = null;
+        running = false;
     }
-    public void setScene(Scene scene){
-        this.scene = scene;
-    }
+    
 }
